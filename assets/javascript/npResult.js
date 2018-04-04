@@ -1,19 +1,28 @@
-localStorage.index = '0'; // To keep track of what page of results user is on, !(<0)
+var index = 0; // To keep track of what page of results user is on, !(<0)
+var orgArray;
+var numOrgs;
+
+function updatePage() {
+    var indexEnd = index + 9;
+    var elementNum = 0; // 0-9
+    for (index; index<=indexEnd; index++) {
+        elementNum = elementNum.toString();
+        var npDiv = 'np' + elementNum; // ID of div for a single non-profit. Range: np0-np9
+        elementNum = parseInt(elementNum) + 1; // Updates elementNum for next iteration
+
+        document.getElementById(npDiv).innerHTML = orgArray[index].name;
+        console.log(orgArray[index]);
+    }
+};
 
 // apiHandler() - handles API data
 /**
  * @param {object} npAPI
  */
-function newPage(npAPI) {
-    // API Variables
-    var numResults = npAPI.total_results;
-    console.log(numResults)
-
-    // Iteration Stuff
-    var indexStart = parseInt(localStorage.index);  // indexStart always a mutliple of 10
-    var indexEnd = indexStart + 9;
-    var indexLength = indexEnd.toString().length; // Length of string of index
-    console.log(indexStart);
+function apiHandler(npAPI) {
+    orgArray = npAPI.organizations;
+    numOrgs = npAPI.total_results;
+    updatePage();
 };
 
 $(document).ready(function() {
@@ -29,30 +38,30 @@ $(document).ready(function() {
         $.ajax({
             url: searchURL,
             method: 'GET'
-        }).then(newPage)
+        }).then(apiHandler)
         .catch(function(err) {alert('error:' + err.message);})
         console.log(localStorage.apiURL);
 
     // When user presses next page button
     $('#nextNp').on('click', function(event) {
-        var indexStart = parseInt(localStorage.index);
-        localStorage.index = indexStart += 10;
-        newPage;
+        index += 10;
+        updatePage();
     });
 
     // When user presses previous page button
     $('#prevNp').on('click', function(event) {
-        var indexStart = parseInt(localStorage.index);
-        if (indexStart === 0) {
+        if (index === 0) {
             // Cannot go before first page error
         }
         else {
-            localStorage.index = indexStart -= 10;
-            newPage;
-        }
+            index -= 10;
+            updatePage();
+        }  
     });
 })
 
 // PROBLEMS
     // 1) How to store object of all organizations for when
         // The user presses next/prev buttons we can get a new list of 10 organizations
+    // FIREBASE
+        // Store users bookmarked articles/charities
