@@ -6,12 +6,19 @@ function updatePage() {
     var indexEnd = index + 9;
     var elementNum = 0; // 0-9
     for (index; index<=indexEnd; index++) {
+        // --- Indexing Updates ---
         elementNum = elementNum.toString();
         var npDiv = 'np' + elementNum; // ID of div for a single non-profit. Range: np0-np9
         elementNum = parseInt(elementNum) + 1; // Updates elementNum for next iteration
 
-        document.getElementById(npDiv).innerHTML = orgArray[index].name;
-        console.log(orgArray[index]);
+        // --- Grabbing API Data ---
+        orgName = orgArray[index].name;
+
+        // --- Assigning HTML Elements to Variables ---
+        var npMainEle = document.getElementById(npDiv);
+        
+        // --- Changing HTML --- 
+        npMainEle.innerHTML = orgName;
     }
 };
 
