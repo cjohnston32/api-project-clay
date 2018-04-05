@@ -66,9 +66,3 @@ $(document).ready(function() {
         }  
     });
 })
-
-// PROBLEMS
-    // 1) How to store object of all organizations for when
-        // The user presses next/prev buttons we can get a new list of 10 organizations
-    // FIREBASE
-        // Store users bookmarked articles/charities
